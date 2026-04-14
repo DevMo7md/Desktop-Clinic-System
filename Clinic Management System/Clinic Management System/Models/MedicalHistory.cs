@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Clinic_Management_System.Models
 {
-    internal class MedicalRecord
+    public class MedicalRecord
     {
         private static int _idCounter = 0;
         public int ID { get; private set; }
@@ -39,7 +39,7 @@ namespace Clinic_Management_System.Models
         }
     }
 
-    internal class ChronicDisease
+    public class ChronicDisease
     {
         private static int _idCounter = 0;
         public int ID { get; private set; }

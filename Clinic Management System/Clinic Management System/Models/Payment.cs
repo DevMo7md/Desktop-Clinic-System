@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Clinic_Management_System.Models
 {
-    internal class Payment
+    public class Payment
     {
         private static int _idCounter = 0;
         public int ID { get; private set; }

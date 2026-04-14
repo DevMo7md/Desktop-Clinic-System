@@ -14,3 +14,4 @@ D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic Management Sy
 D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic Management System\obj\Debug\net10.0-windows\Clinic Management System.pdb
 D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic Management System\obj\Debug\net10.0-windows\Clinic Management System.genruntimeconfig.cache
 D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic Management System\obj\Debug\net10.0-windows\ref\Clinic Management System.dll
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic Management System\obj\Debug\net10.0-windows\Clinic Management System.sourcelink.json

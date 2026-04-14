@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Clinic_Management_System.Models
 {
-    internal class Doctor : Person
+    public class Doctor : Person
     {
         public string Specialty { get; set; }
 
-        public Doctor(string name, int age,/*Gander gander,*/ string specialty) : base(name, age/*, gander*/)
+        public Doctor(string name, int age,Gender gender, string specialty) : base(name, age, gender)
         {
             Specialty = specialty;
         }
