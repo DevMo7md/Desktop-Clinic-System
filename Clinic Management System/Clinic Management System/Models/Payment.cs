@@ -8,7 +8,7 @@ namespace Clinic_Management_System.Models
     {
         private static int _idCounter = 0;
         public int ID { get; private set; }
-        public required Appointment PaymentAppointment { get; set; }
+        public Appointment PaymentAppointment { get; set; }
         public decimal Amount { get; set; }
         public DateTime PaymentDate { get; set; }
 
@@ -31,7 +31,10 @@ namespace Clinic_Management_System.Models
         {
             return $"Payment ID: {ID} | Appointment: {PaymentAppointment.GetAppointmentDetails()} | Amount: {Amount} | Date: {PaymentDate}";
         }
-
+        public void LoadID(int id)
+        {
+            ID = id;
+        }
         // to update the counter if program closed
         public static void UpdateCounter(int lastId)
         {

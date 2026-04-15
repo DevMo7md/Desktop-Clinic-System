@@ -8,8 +8,8 @@ namespace Clinic_Management_System.Models
     {
         private static int _idCounter = 0;
         public int ID { get; private set; }
-        public required string Diagnosis { get; set; }
-        public required string Treatment { get; set; }
+        public string Diagnosis { get; set; }
+        public string Treatment { get; set; }
         public DateTime Date { get; set; }
 
         public MedicalRecord(string diagnosis, string treatment)
@@ -31,7 +31,10 @@ namespace Clinic_Management_System.Models
         {
             return $"ID: {ID} | Diagnosis: {Diagnosis} | Treatment: {Treatment} | Date: {Date}";
         }
-
+        public void LoadID(int id)
+        {
+            ID = id;
+        }
         // to update the counter if program closed
         public static void UpdateCounter(int lastId)
         {
@@ -43,8 +46,8 @@ namespace Clinic_Management_System.Models
     {
         private static int _idCounter = 0;
         public int ID { get; private set; }
-        public required string Name { get; set; }
-        public required string Notes { get; set; }
+        public string Name { get; set; }
+        public string Notes { get; set; }
         public ChronicDisease(string name, string notes)
         {
             ID = ++_idCounter; 
@@ -56,7 +59,10 @@ namespace Clinic_Management_System.Models
         {
             return $"ID: {ID} | Name: {Name} | Notes: {Notes}";
         }
-
+        public void LoadID(int id)
+        {
+            ID = id;
+        }
         // to update the counter if program closed
         public static void UpdateCounter(int lastId)
         {
