@@ -1,4 +1,6 @@
 Planning
 Clinic Management System/.vs
-Clinic Management System/Clinic Management System/obj
-Clinic Management System/Clinic Management System/bin
+[Bb]in/
+[Oo]bj/
+*.txt
+*.user
