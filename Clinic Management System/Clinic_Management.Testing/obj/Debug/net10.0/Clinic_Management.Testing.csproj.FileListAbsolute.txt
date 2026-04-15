@@ -1,0 +1,15 @@
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\bin\Debug\net10.0\Clinic_Management.Testing.exe
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\bin\Debug\net10.0\Clinic_Management.Testing.deps.json
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\bin\Debug\net10.0\Clinic_Management.Testing.runtimeconfig.json
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\bin\Debug\net10.0\Clinic_Management.Testing.dll
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\bin\Debug\net10.0\Clinic_Management.Testing.pdb
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\obj\Debug\net10.0\Clinic_Management.Testing.GeneratedMSBuildEditorConfig.editorconfig
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\obj\Debug\net10.0\Clinic_Management.Testing.AssemblyInfoInputs.cache
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\obj\Debug\net10.0\Clinic_Management.Testing.AssemblyInfo.cs
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\obj\Debug\net10.0\Clinic_Management.Testing.csproj.CoreCompileInputs.cache
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\obj\Debug\net10.0\Clinic_Management.Testing.sourcelink.json
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\obj\Debug\net10.0\Clinic_Management.Testing.dll
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\obj\Debug\net10.0\refint\Clinic_Management.Testing.dll
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\obj\Debug\net10.0\Clinic_Management.Testing.pdb
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\obj\Debug\net10.0\Clinic_Management.Testing.genruntimeconfig.cache
+D:\Uni_C#\First Year Project (OOP)\Clinic Management System\Clinic_Management.Testing\obj\Debug\net10.0\ref\Clinic_Management.Testing.dll
