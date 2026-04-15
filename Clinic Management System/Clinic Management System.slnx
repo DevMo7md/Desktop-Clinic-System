@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="Clinic Management System/Clinic Management System.csproj" />
+  <Project Path="Clinic_Management.Testing/Clinic_Management.Testing.csproj" Id="bd159841-d522-4e0a-813d-1df79befc18e" />
 </Solution>
