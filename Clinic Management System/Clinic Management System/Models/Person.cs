@@ -31,6 +31,11 @@ namespace Clinic_Management_System.Models
             PersonGender = gender;
         }
 
+        public void LoadID(int id) 
+        { 
+            ID = id; 
+        }
+
         public virtual string DisplayInfo()
         {
             return $"Name : {Name}, Age: {Age}, Gander: {PersonGender}";

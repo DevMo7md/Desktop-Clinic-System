@@ -38,7 +38,10 @@ namespace Clinic_Management_System.Models
         {
             return $"Patient: {AppointmentPatient.Name} | Doctor: {AppointmentDoctor.Name} | Date: {AppointmentDate}";
         }
-
+        public void LoadID(int id)
+        {
+            ID = id;
+        }
         // to update the counter if program closed
         public static void UpdateCounter(int lastId)
         {
