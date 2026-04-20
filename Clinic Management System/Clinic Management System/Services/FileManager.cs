@@ -40,7 +40,7 @@ namespace Clinic_Management_System.Services
                 $"{a.ID};{a.AppointmentPatient.ID};{a.AppointmentDoctor.ID};{a.AppointmentDate};{a.Status};{a.Fee}"));
 
             File.WriteAllLines(PaymentFile, payments.Select(p =>
-                $"{p.ID};{p.PaymentAppointment.ID};{p.Amount};{p.PaymentDate}"));
+                $"{p.ID};{p.PaymentAppointment.ID};{p.Amount};{p.PaymentDate};{p.Status}"));
         }
 
         public void LoadData(out List<Doctor> doctors, out List<Patient> patients, out List<Appointment> appointments, out List<Payment> payments)
@@ -137,7 +137,8 @@ namespace Clinic_Management_System.Services
                     var app = appointments.FirstOrDefault(a => a.ID == int.Parse(parts[1]));
                     if (app != null)
                     {
-                        var pay = new Payment(app, decimal.Parse(parts[2]), DateTime.Parse(parts[3]));
+                        var status = (PaymentStatus)Enum.Parse(typeof(PaymentStatus), parts[4]);
+                        var pay = new Payment(app, decimal.Parse(parts[2]), DateTime.Parse(parts[3]), status);
                         pay.LoadID(int.Parse(parts[0]));
                         payments.Add(pay);
                     }
