@@ -16,4 +16,9 @@ namespace Clinic_Management_System.Models
         Completed,
         Cancelled
     }
+    public enum PaymentStatus
+    {
+        Refunded,
+        Paid
+    }
 }
