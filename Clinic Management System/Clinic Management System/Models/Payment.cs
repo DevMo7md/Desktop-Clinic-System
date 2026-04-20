@@ -10,21 +10,24 @@ namespace Clinic_Management_System.Models
         public int ID { get; private set; }
         public Appointment PaymentAppointment { get; set; }
         public decimal Amount { get; set; }
+        public PaymentStatus Status { get; set; }
         public DateTime PaymentDate { get; set; }
 
-        public Payment(Appointment appointment, decimal amount)
+        public Payment(Appointment appointment, decimal amount, PaymentStatus status)
         {
             ID = ++_idCounter;
             PaymentAppointment = appointment;
             Amount = amount;
             PaymentDate = DateTime.Now;
+            Status = status;
         }
-        public Payment(Appointment appointment, decimal amount, DateTime paymentDate)
+        public Payment(Appointment appointment, decimal amount, DateTime paymentDate, PaymentStatus status)
         {
             ID = ++_idCounter;
             PaymentAppointment = appointment;
             Amount = amount;
             PaymentDate = paymentDate;
+            Status = status;
         }
 
         public string GetPaymentDetails()
