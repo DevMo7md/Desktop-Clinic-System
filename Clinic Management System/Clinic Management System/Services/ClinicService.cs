@@ -19,6 +19,16 @@ namespace Clinic_Management_System.Services
             _fileManager.LoadData(out _doctors, out _patients, out _appointments, out _payments);
         }
 
+<<<<<<< Updated upstream
+=======
+        public List<Patient> GetPatients() => new List<Patient>(_patients);
+        public List<Doctor> GetDoctors() => new List<Doctor>(_doctors);
+        public List<Appointment> GetAppointments() => new List<Appointment>(_appointments);
+        public List<Payment> GetPayments() => new List<Payment>(_payments);
+
+
+        #region Patient Methods
+>>>>>>> Stashed changes
         public void AddPatient(string name, int age, Gender gender)
         {
             _patients.Add(new Patient(name, age, gender));
