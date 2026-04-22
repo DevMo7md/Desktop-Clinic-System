@@ -24,6 +24,7 @@ namespace Clinic_Management_System.Services
         public List<Patient> GetPatients() => new List<Patient>(_patients);
         public List<Doctor> GetDoctors() => new List<Doctor>(_doctors);
         public List<Appointment> GetAppointments() => new List<Appointment>(_appointments);
+        public List<Payment> GetPayments() => new List<Payment>(_payments);
 
 
         #region Patient Methods
