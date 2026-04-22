@@ -6,8 +6,7 @@ namespace Clinic_Management_System.Models
 {
     public class Person
     {
-        private static int _idCounter = 0;
-        public int ID { get; private set; }
+        public int ID { get; protected set; }
         public string Name { get; set; }
         private int age;
         public Gender PersonGender { get; set; }
@@ -25,7 +24,6 @@ namespace Clinic_Management_System.Models
         }
         public Person(string name, int age, Gender gender)
         {
-            ID = ++_idCounter;
             Name = name;
             Age = age;
             PersonGender = gender;
@@ -41,10 +39,6 @@ namespace Clinic_Management_System.Models
             return $"Name : {Name}, Age: {Age}, Gander: {PersonGender}";
         }
 
-        // to update the counter if program closed 
-        public static void UpdateCounter(int lastId)
-        {
-            _idCounter = lastId;
-        }
+        
     }
 }

@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Clinic_Management_System.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Clinic_Management_System.Models;
+using System.Xml.Linq;
 
 namespace Clinic_Management_System.Services
 {
@@ -17,10 +18,9 @@ namespace Clinic_Management_System.Services
         {
             _fileManager = new FileManager();
             _fileManager.LoadData(out _doctors, out _patients, out _appointments, out _payments);
+
         }
 
-<<<<<<< Updated upstream
-=======
         public List<Patient> GetPatients() => new List<Patient>(_patients);
         public List<Doctor> GetDoctors() => new List<Doctor>(_doctors);
         public List<Appointment> GetAppointments() => new List<Appointment>(_appointments);
@@ -28,17 +28,20 @@ namespace Clinic_Management_System.Services
 
 
         #region Patient Methods
->>>>>>> Stashed changes
         public void AddPatient(string name, int age, Gender gender)
         {
+            ValidatePersonData(name, age);
+
             _patients.Add(new Patient(name, age, gender));
             Sync();
         }
+
 
         public void EditPatient(int id, string name, int age, Gender gender)
         {
             var p = _patients.FirstOrDefault(x => x.ID == id);
             if (p == null) throw new ArgumentException("المريض غير موجود في النظام.");
+            ValidatePersonData(name, age);
             p.Name = name;
             p.Age = age;
             p.PersonGender = gender;
@@ -50,6 +53,12 @@ namespace Clinic_Management_System.Services
             var p = _patients.FirstOrDefault(x => x.ID == id);
             if (p == null) throw new ArgumentException("المريض غير موجود في النظام.");
 
+            if (_appointments.Any(a => a.AppointmentPatient.ID == id && a.Status == AppointmentStatus.Pending))
+            {
+                throw new InvalidOperationException("لا يمكن حذف المريض لأن لديه مواعيد قادمة. يرجى إلغاء المواعيد أولاً.");
+            }
+
+            // CASCADE delete
             var relatedApps = _appointments.Where(a => a.AppointmentPatient.ID == id).Select(a => a.ID).ToList();
             _payments.RemoveAll(pay => relatedApps.Contains(pay.PaymentAppointment.ID));
             _appointments.RemoveAll(a => relatedApps.Contains(a.ID));
@@ -57,11 +66,16 @@ namespace Clinic_Management_System.Services
 
             Sync();
         }
+        #endregion
 
+        #region Medical Records & Chronic Diseases
         public void AddMedicalRecord(int patientId, string diagnosis, string treatment)
         {
             var p = _patients.FirstOrDefault(x => x.ID == patientId);
             if (p == null) throw new ArgumentException("المريض غير موجود.");
+
+            ValidateString(diagnosis, "التشخيص");
+            ValidateString(treatment, "العلاج");
 
             p.medical_record.Add(new MedicalRecord(diagnosis, treatment));
             Sync();
@@ -74,6 +88,9 @@ namespace Clinic_Management_System.Services
 
             var record = p.medical_record.FirstOrDefault(r => r.ID == recordId);
             if (record == null) throw new ArgumentException("السجل الطبي المطلوب غير موجود.");
+
+            ValidateString(diagnosis, "التشخيص");
+            ValidateString(treatment, "العلاج");
 
             record.Diagnosis = diagnosis;
             record.Treatment = treatment;
@@ -96,6 +113,9 @@ namespace Clinic_Management_System.Services
         {
             var p = _patients.FirstOrDefault(x => x.ID == patientId);
             if (p == null) throw new ArgumentException("المريض غير موجود.");
+            
+            ValidateString(name, "اسم المرض المزمن");
+            ValidateString(notes, "ملاحظات المرض المزمن");
 
             p.chronic_diseases.Add(new ChronicDisease(name, notes));
             Sync();
@@ -108,7 +128,10 @@ namespace Clinic_Management_System.Services
 
             var disease = p.chronic_diseases.FirstOrDefault(c => c.ID == diseaseId);
             if (disease == null) throw new ArgumentException("المرض المزمن المطلوب غير موجود.");
-
+            
+            ValidateString(name, "اسم المرض المزمن");
+            ValidateString(notes, "ملاحظات المرض المزمن");
+            
             disease.Name = name;
             disease.Notes = notes;
             Sync();
@@ -125,10 +148,13 @@ namespace Clinic_Management_System.Services
             p.chronic_diseases.Remove(disease);
             Sync();
         }
+        #endregion
 
-
+        #region Doctor Methods
         public void AddDoctor(string name, int age, Gender gender, string specialty)
         {
+            ValidatePersonData(name, age);
+
             _doctors.Add(new Doctor(name, age, gender, specialty));
             Sync();
         }
@@ -137,7 +163,7 @@ namespace Clinic_Management_System.Services
         {
             var d = _doctors.FirstOrDefault(x => x.ID == id);
             if (d == null) throw new ArgumentException("الطبيب غير موجود.");
-
+            ValidatePersonData(name, age);
             d.Name = name;
             d.Age = age;
             d.PersonGender = gender;
@@ -151,15 +177,13 @@ namespace Clinic_Management_System.Services
             if (d == null) throw new ArgumentException("الطبيب غير موجود في النظام.");
 
             if (_appointments.Any(a => a.AppointmentDoctor.ID == id && a.Status == AppointmentStatus.Pending)) throw new InvalidOperationException("لا يمكن حذف الطبيب لأنه لديه مواعيد قادمة.");
+
             _doctors.Remove(d);
             Sync();
         }
+        #endregion
 
-        private bool IsDoctorBusy(int doctorId, DateTime date, int? excludeAppId = null)
-        {
-            return _appointments.Any(a => a.AppointmentDoctor.ID == doctorId && (a.ID != excludeAppId || excludeAppId == null) && a.Status != AppointmentStatus.Cancelled && Math.Abs((a.AppointmentDate - date).TotalMinutes) < 30);
-        }
-
+        #region Appointment Methods
         public void AddAppointment(int patientId, int doctorId, decimal fee, DateTime date)
         {
             var p = _patients.FirstOrDefault(x => x.ID == patientId);
@@ -190,8 +214,6 @@ namespace Clinic_Management_System.Services
                 var newDoc = _doctors.FirstOrDefault(d => d.ID == newDoctorId);
                 if (newDoc == null) throw new ArgumentException("الطبيب الجديد غير موجود.");
 
-                if (newDate < DateTime.Now)
-                    throw new ArgumentException("لا يمكن حجز ميعاد في وقت سابق.");
 
                 app.AppointmentDoctor = newDoc;
                 app.AppointmentDate = newDate;
@@ -231,7 +253,10 @@ namespace Clinic_Management_System.Services
             }
             Sync();
         }
+        #endregion
 
+
+        #region Payment Methods
         public void AddPayment(int appointmentId, decimal amount)
         {
             var app = _appointments.FirstOrDefault(a => a.ID == appointmentId);
@@ -260,16 +285,10 @@ namespace Clinic_Management_System.Services
             _payments.Remove(pay);
             Sync();
         }
+        #endregion
 
-        private void Sync() 
-        {
-         _fileManager.SaveData(_doctors, _patients, _appointments, _payments);
-        }
 
-        public List<Patient> GetPatients() => _patients;
-        public List<Doctor> GetDoctors() => _doctors;
-        public List<Appointment> GetAppointments() => _appointments;
-
+        #region Search & Filtering
         // Search by ID or name (case-insensitive)
         public List<Patient> SearchPatients(string query)
         {
@@ -309,6 +328,28 @@ namespace Clinic_Management_System.Services
         public List<Appointment> GetPatientHistory(int patientId)
         {
             return _appointments.Where(a => a.AppointmentPatient.ID == patientId).ToList();
+        }
+        #endregion
+
+        #region Validation Helpers
+        private bool IsDoctorBusy(int doctorId, DateTime date, int? excludeAppId = null)
+        {
+            return _appointments.Any(a => a.AppointmentDoctor.ID == doctorId && (a.ID != excludeAppId || excludeAppId == null) && a.Status != AppointmentStatus.Cancelled && Math.Abs((a.AppointmentDate - date).TotalMinutes) < 30);
+        }
+        private void ValidatePersonData(string name, int age)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("الاسم لا يمكن أن يكون فارغاً.");
+            if (age <= 0 || age > 120) throw new ArgumentException("يرجى إدخال عمر منطقي بين 1 و 120.");
+        }
+        private void ValidateString(string value, string fieldName)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException($"{fieldName} لا يمكن أن يكون فارغاً.");
+        }
+        #endregion
+        private void Sync()
+        {
+            _fileManager.SaveData(_doctors, _patients, _appointments, _payments);
         }
     }
 }
