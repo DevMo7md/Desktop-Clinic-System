@@ -83,7 +83,7 @@ namespace Clinic_Management_System.Forms
         {
             var p = new Panel { Dock = DockStyle.Top, Height = 46 };
 
-            btnAdd = Btn("+ Add Appointment",Color.White, Color.FromArgb(13, 110, 253),  148);
+            btnAdd = Btn("+ Add Appointment",Color.FromArgb(13, 110, 253), Color.White,   200);
             btnAdd.Click += (s, e) => { _editingId = null; ClearForm(); };
 
             btnEdit = Btn("✎  Edit",Color.White, Color.FromArgb(108, 117, 125),  80);
@@ -178,7 +178,7 @@ namespace Clinic_Management_System.Forms
             };
 
             dgvAppointments.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(248, 249, 250);
-            dgvAppointments.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9f, FontStyle.Bold);
+            dgvAppointments.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9f, FontStyle.Regular);
             dgvAppointments.EnableHeadersVisualStyles = false;
             dgvAppointments.DefaultCellStyle.SelectionBackColor = Color.FromArgb(207, 226, 255);
             dgvAppointments.DefaultCellStyle.SelectionForeColor = Color.Black;
