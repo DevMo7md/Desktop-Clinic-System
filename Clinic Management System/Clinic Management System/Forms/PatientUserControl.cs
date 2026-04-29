@@ -106,7 +106,7 @@ namespace Clinic_Management_System
                 Dock = DockStyle.Top,
                 Height = 36,
                 BackColor = Color.FromArgb(245, 245, 245),
-                Padding = new Padding(4)
+                Padding = new Padding(0)
             };
             pnlToolbar.Paint += (s, e) =>
             {
@@ -161,7 +161,7 @@ namespace Clinic_Management_System
                 Dock = DockStyle.Fill,
                 ColumnCount = 2,
                 RowCount = 1,
-                Padding = new Padding(10, 10, 10, 0),
+                Padding = new Padding(10, 50, 10, 0),
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.None
             };
             pnlTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -605,7 +605,7 @@ namespace Clinic_Management_System
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9),
-                Margin = new Padding(2)
+                Margin = new Padding(4, 0, 4, 0)
             };
         }
 
@@ -619,7 +619,7 @@ namespace Clinic_Management_System
                 BackColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 9),
-                Margin = new Padding(2)
+                Margin = new Padding(4,0,4,0)
             };
         }
 
@@ -686,7 +686,7 @@ namespace Clinic_Management_System
                 Dock = DockStyle.Fill,
                 FlowDirection = FlowDirection.LeftToRight,
                 WrapContents = false,
-                Padding = new Padding(4, 4, 4, 0)
+                Padding = new Padding(4, 0, 4, 0)
             };
             flow.Controls.Add(btnAdd);
             flow.Controls.Add(btnEdit);

@@ -36,14 +36,14 @@ namespace Clinic_Management_System.Forms
 
         // ── Right panel ───────────────────────────────────────
         private GroupBox grpRight = null!;
-        private ProgressBar pbChildren = null!;
-        private ProgressBar pbYouth = null!;
-        private ProgressBar pbSeniors = null!;
+        private ColorBar pbChildren = null!;
+        private ColorBar pbYouth = null!;
+        private ColorBar pbSeniors = null!;
         private Label lblChildrenVal = null!;
         private Label lblYouthVal = null!;
         private Label lblSeniorsVal = null!;
-        private ProgressBar pbCompleted = null!;
-        private ProgressBar pbCancelled = null!;
+        private ColorBar pbCompleted = null!;
+        private ColorBar pbCancelled = null!;
         private Label lblCompletedVal = null!;
         private Label lblCancelledVal = null!;
 
@@ -103,7 +103,7 @@ namespace Clinic_Management_System.Forms
                 Font = new Font("Segoe UI", 9F),
                 Location = new Point(210, 9),
                 Width = 110,
-                Value = DateTime.Today
+                Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
             };
 
             btnGenerate = new Button
@@ -201,7 +201,7 @@ namespace Clinic_Management_System.Forms
                 TextAlign = ContentAlignment.BottomCenter
             };
             var t = new Label
-            {
+            { 
                 Text = title,
                 Font = new Font("Segoe UI", 7.5F),
                 ForeColor = Color.Gray,
@@ -291,18 +291,18 @@ namespace Clinic_Management_System.Forms
 
             flow.Controls.Add(SectionLabel("Patient Age Groups", flow));
 
-            var rowC = MakeProgressRow("Children (0–15)", Color.FromArgb(92, 184, 92), flow);
-            pbChildren = (ProgressBar)rowC.Tag!;
+            var rowC = MakeProgressRow("Children (0–15)", Color.FromArgb(217, 40, 139), flow);
+            pbChildren = (ColorBar)rowC.Tag!;
             lblChildrenVal = (Label)rowC.Controls[2];
             flow.Controls.Add(rowC);
 
-            var rowY = MakeProgressRow("Youth (16–40)", Color.FromArgb(53, 122, 189), flow);
-            pbYouth = (ProgressBar)rowY.Tag!;
+            var rowY = MakeProgressRow("Youth (16–40)", Color.FromArgb(255, 160, 50), flow);
+            pbYouth = (ColorBar)rowY.Tag!;
             lblYouthVal = (Label)rowY.Controls[2];
             flow.Controls.Add(rowY);
 
-            var rowS = MakeProgressRow("Seniors (41+)", Color.FromArgb(217, 83, 79), flow);
-            pbSeniors = (ProgressBar)rowS.Tag!;
+            var rowS = MakeProgressRow("Seniors (41+)", Color.FromArgb(100, 90, 150), flow);
+            pbSeniors = (ColorBar)rowS.Tag!;
             lblSeniorsVal = (Label)rowS.Controls[2];
             flow.Controls.Add(rowS);
 
@@ -316,13 +316,13 @@ namespace Clinic_Management_System.Forms
 
             flow.Controls.Add(SectionLabel("Appointments Breakdown", flow));
 
-            var rowComp = MakeProgressRow("Completed", Color.FromArgb(53, 122, 189), flow);
-            pbCompleted = (ProgressBar)rowComp.Tag!;
+            var rowComp = MakeProgressRow("Completed", Color.FromArgb(92, 184, 92), flow);
+            pbCompleted = (ColorBar)rowComp.Tag!;
             lblCompletedVal = (Label)rowComp.Controls[2];
             flow.Controls.Add(rowComp);
 
             var rowCanc = MakeProgressRow("Cancelled", Color.FromArgb(217, 83, 79), flow);
-            pbCancelled = (ProgressBar)rowCanc.Tag!;
+            pbCancelled = (ColorBar)rowCanc.Tag!;
             lblCancelledVal = (Label)rowCanc.Controls[2];
             flow.Controls.Add(rowCanc);
 
@@ -381,17 +381,17 @@ namespace Clinic_Management_System.Forms
                 Height = 16
             };
 
-            var pb = new ProgressBar
+
+            var pb = new ColorBar
             {
                 Location = new Point(0, 20),
                 Width = Math.Max(initW - 62, 20),
                 Height = 14,
-                Minimum = 0,
-                Maximum = 100,
-                Value = 0,
-                Style = ProgressBarStyle.Continuous
+                BarColor = barColor,
+                Value = 0
             };
-            ApplyProgressColor(pb, barColor);
+
+
 
             var val = new Label
             {
@@ -490,7 +490,7 @@ namespace Clinic_Management_System.Forms
             List<string> keys,
             Dictionary<string, int> demo,
             int total,
-            ProgressBar pb,
+            ColorBar pb,
             Label lbl)
         {
             int val = ki < keys.Count ? demo[keys[ki]] : 0;
@@ -618,6 +618,56 @@ namespace Clinic_Management_System.Forms
                 pb.HandleCreated += (s, _) =>
                     SendMessage(((ProgressBar)s!).Handle, PBM_SETBARCOLOR,
                         IntPtr.Zero, (IntPtr)ColorTranslator.ToWin32(c));
+        }
+    }
+
+    // ════════════════════════════════════════════════════════
+    // ColorBar — custom progress bar that works with VisualStyles
+    // ════════════════════════════════════════════════════════
+    public class ColorBar : Control
+    {
+        private int _value = 0;
+        private Color _barColor = Color.FromArgb(53, 122, 189);
+        private readonly Color _bgColor = Color.FromArgb(224, 224, 224);
+
+        [System.ComponentModel.DesignerSerializationVisibility(
+    System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public int Value
+        {
+            get => _value;
+            set { _value = Math.Max(0, Math.Min(100, value)); Invalidate(); }
+        }
+
+        [System.ComponentModel.DesignerSerializationVisibility(
+            System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public Color BarColor
+        {
+            get => _barColor;
+            set { _barColor = value; Invalidate(); }
+        }
+
+        public ColorBar()
+        {
+            this.SetStyle(
+                ControlStyles.UserPaint |
+                ControlStyles.AllPaintingInWmPaint |
+                ControlStyles.OptimizedDoubleBuffer, true);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            var rc = this.ClientRectangle;
+
+            using var bgBr = new SolidBrush(_bgColor);
+            g.FillRectangle(bgBr, rc);
+
+            int fillW = (int)(rc.Width * _value / 100.0);
+            if (fillW > 0)
+            {
+                using var fillBr = new SolidBrush(_barColor);
+                g.FillRectangle(fillBr, 0, 0, fillW, rc.Height);
+            }
         }
     }
 }

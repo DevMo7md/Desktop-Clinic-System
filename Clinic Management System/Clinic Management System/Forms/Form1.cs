@@ -14,13 +14,11 @@ namespace Clinic_Management_System
         private AnalyticsUserControl _analyticsPage;
         private Panel pnlSidebar;
         private Panel pnlNavIndicator;
-
-        // teammates will add theirs here later:
-        // private PatientsUserControl     _patientsPage;
-        // private DoctorsUserControl      _doctorsPage;
-        // private AppointmentsUserControl _appointmentsPage;
-        // private PaymentsUserControl     _paymentsPage;
-        // private DashboardUserControl    _dashboardPage;
+        private PatientUserControl _patientsPage;
+        private DoctorUserControl _doctorsPage;
+        private AppointmentUserControl _appointmentsPage;
+        private PaymentUserControl     _paymentsPage;
+        private DashboardUserControl    _dashboardPage;
 
         public Form1()
         {
@@ -32,18 +30,32 @@ namespace Clinic_Management_System
             _clinicService = new ClinicService();
 
             // ── Create Analytics page ─────────────────────────
+            _dashboardPage = new DashboardUserControl(_clinicService);
+            ConfigurePage(_dashboardPage);
+            pnlContent.Controls.Add(_dashboardPage);
+
             _analyticsPage = new AnalyticsUserControl(_clinicService);
             ConfigurePage(_analyticsPage);
             pnlContent.Controls.Add(_analyticsPage);
 
 
-            // teammates: same pattern ─────────────────────────
-            // _patientsPage = new PatientsUserControl(_clinicService);
-            // ConfigurePage(_patientsPage);
-            // pnlContent.Controls.Add(_patientsPage);
+            _patientsPage = new PatientUserControl(_clinicService);
+            ConfigurePage(_patientsPage);
+            pnlContent.Controls.Add(_patientsPage);
 
-            // ── Show Analytics as default page ────────────────
-            ShowPage(_analyticsPage);
+            _doctorsPage = new DoctorUserControl(_clinicService);
+            ConfigurePage(_doctorsPage);
+            pnlContent.Controls.Add(_doctorsPage);
+
+            _appointmentsPage = new AppointmentUserControl(_clinicService);
+            ConfigurePage(_appointmentsPage);
+            pnlContent.Controls.Add(_appointmentsPage);
+
+            _paymentsPage = new PaymentUserControl(_clinicService);
+            ConfigurePage(_paymentsPage);
+            pnlContent.Controls.Add(_paymentsPage);
+
+            ShowPage(_dashboardPage);
         }
 
         // ── Helpers ───────────────────────────────────────────
@@ -58,26 +70,31 @@ namespace Clinic_Management_System
             foreach (Control c in pnlContent.Controls)
                 c.Visible = false;
 
-            // إظهار الصفحة المطلوبة فقط
             page.Visible = true;
             page.BringToFront();
 
-            // تحديث الداتا إذا كانت صفحة Analytics
             if (page is AnalyticsUserControl a)
                 a.Refresh();
+            if (page is PatientUserControl b)
+                b.Refresh();
+            if (page is PaymentUserControl d)
+                d.Refresh();
+            if (page is DoctorUserControl f)
+                f.Refresh();
+            if (page is AppointmentUserControl m)
+                m.Refresh();
+
+            if (page is DashboardUserControl n)
+            n.Refresh();
         }
 
 
-        // ── Navigation button events ──────────────────────────
-        // button1 is already wired in Designer — point it to Analytics for now
         private void button1_Click(object sender, EventArgs e)
         {
             ShowPage(_analyticsPage);
         }
 
-        // teammates: add their nav buttons here, same pattern:
-        // private void btnPatients_Click(object sender, EventArgs e)
-        //     => ShowPage(_patientsPage);
+     
 
         // ── Designer event (keep as-is) ───────────────────────
         private void panel1_Paint(object sender, PaintEventArgs e) { }
@@ -97,17 +114,37 @@ namespace Clinic_Management_System
             pnlContent.Dock = DockStyle.Fill;
 
             // ── ORDER MATTERS in WinForms ──────────────────────────
-            // Fill must be added FIRST, then Left — WinForms docks
-            // in REVERSE order of Controls.Add
-            this.Controls.Add(pnlContent);   // ← added first = behind
-            this.Controls.Add(pnlSidebar);   // ← added second = left side
+            this.Controls.Add(pnlContent);  
+            this.Controls.Add(pnlSidebar);   
 
+            AddSectionLabel("MAIN");
             AddNavButton("Dashboard", Properties.Resources.home_color_icon, 0);
+
+            AddSectionLabel("MANAGEMENT");
             AddNavButton("Patients", Properties.Resources.man_user_circle_icon, 1);
             AddNavButton("Doctors", Properties.Resources.doctor_color_icon, 2);
             AddNavButton("Appointments", Properties.Resources.calenar_color_icon, 3);
             AddNavButton("Payments", Properties.Resources.credit_card_color_icon, 4);
+
+            AddSectionLabel("REPORTS");
             AddNavButton("Analytics", Properties.Resources.analytics_color_icon, 5);
+        }
+
+        private void AddSectionLabel(string text)
+        {
+            var lbl = new Label
+            {
+                Text = text,
+                Font = new Font("Segoe UI", 7.5F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(130, 130, 130),
+                Dock = DockStyle.Top,
+                Height = 28,
+                TextAlign = ContentAlignment.BottomLeft,
+                Padding = new Padding(16, 0, 0, 4),
+                BackColor = Color.FromArgb(240, 240, 240)
+            };
+            pnlSidebar.Controls.Add(lbl);
+            lbl.BringToFront();
         }
 
         private void AddNavButton(string text, Image? icon, int index)
@@ -131,7 +168,7 @@ namespace Clinic_Management_System
             btn.Click += NavButton_Click;
 
             pnlSidebar.Controls.Add(btn);
-            // لترتيب الأزرار من الأعلى للأسفل
+            
             btn.BringToFront();
         }
 
@@ -139,7 +176,7 @@ namespace Clinic_Management_System
         {
             Button clickedBtn = (Button)sender;
 
-            // تغيير شكل الزر النشط
+            
             foreach (Control ctrl in pnlSidebar.Controls)
             {
                 if (ctrl is Button b)
@@ -148,18 +185,31 @@ namespace Clinic_Management_System
                     b.ForeColor = Color.Black;
                 }
             }
-            clickedBtn.BackColor = Color.FromArgb(53, 122, 189); // أزرق زي الـ HTML
+            clickedBtn.BackColor = Color.FromArgb(53, 122, 189); 
             clickedBtn.ForeColor = Color.White;
 
-            // إظهار الصفحة المناسبة
+            
             int index = (int)clickedBtn.Tag;
             switch (index)
             {
-                case 5: // Analytics
+                case 0:
+                    ShowPage(_dashboardPage);
+                    break;
+                case 1:
+                    ShowPage(_patientsPage);
+                    break;
+                case 2:
+                    ShowPage(_doctorsPage);
+                    break;
+                case 3:
+                    ShowPage(_appointmentsPage);
+                    break;
+                case 4: 
+                    ShowPage(_paymentsPage);
+                    break;
+                case 5: 
                     ShowPage(_analyticsPage);
                     break;
-                    // هنا زمايلك هيضيفوا حالاتهم بنفس الطريقة
-                    // case 1: ShowPage(_patientsPage); break;
             }
         }
         #endregion
