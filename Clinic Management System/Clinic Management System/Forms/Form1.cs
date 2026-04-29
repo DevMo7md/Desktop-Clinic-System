@@ -13,7 +13,6 @@ namespace Clinic_Management_System
         // ── Pages ─────────────────────────────────────────────
         private AnalyticsUserControl _analyticsPage;
         private Panel pnlSidebar;
-        private Panel pnlNavIndicator;
         private PatientUserControl _patientsPage;
         private DoctorUserControl _doctorsPage;
         private AppointmentUserControl _appointmentsPage;
@@ -23,6 +22,9 @@ namespace Clinic_Management_System
         public Form1()
         {
             InitializeComponent();
+
+            this.Icon = Properties.Resources.favicon;
+
             this.WindowState = FormWindowState.Maximized;
             SetupLayout();
 
